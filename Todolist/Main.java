@@ -23,8 +23,15 @@ public class Main {
             System.out.println("5. Quitter");
             System.out.print("Choix : ");
 
-            int choice = sc.nextInt();
-            sc.nextLine(); // évite les bugs d’entrée clavier
+            String input = sc.nextLine();
+            int choice;
+
+            try {
+                choice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println(" Veuillez entrer un nombre fesant parti de la liste !");
+                continue;
+            }
 
             switch (choice) {
                 case 1:
@@ -48,32 +55,40 @@ public class Main {
                     }
                     break;
                 case 3:
-                    // Marquer comme terminée
-                    System.out.println("Quelle taches voulez avez vous terminé (Préciser son titre) ?");
-                    String tache = sc.nextLine();
-                    for (Task t: tasks){
-                        if (tache.equals(t.getTitre())){
-                            t.markAsDone();
+                    if (tasks.isEmpty()) {
+                        System.out.println("La liste de taches est vide !");
+                    }else{
+                        for(Task t: tasks){
+                            System.out.println(t);
+                        }
+                        System.out.println("Quelle taches voulez avez vous terminé (Préciser son titre) ?");
+                        String tache = sc.nextLine();
+                        for (Task t: tasks){
+                            if (tache.equals(t.getTitre())){
+                                t.markAsDone();
+                            }
                         }
                     }
                     break;
                 case 4:
-                    System.out.println("Quelle taches voulez avez vous terminé (Préciser son titre) ?");
-                    String taches = sc.nextLine();
-                    if (tasks.removeIf(t -> taches.equals(t.getTitre())))
-                    {
-                        System.out.println("La tache a bien été suppprimer");
+                    if (tasks.isEmpty()) {
+                        System.out.println("La liste de taches est vide !");
+                    }else {
+                        for (Task t : tasks) {
+                            System.out.println(t);
+                        }
+                        System.out.println("Quelle taches voulez avez vous terminé (Préciser son titre) ?");
+                        String taches = sc.nextLine();
+                        if (tasks.removeIf(t -> taches.equals(t.getTitre()))) {
+                            System.out.println("La tache a bien été suppprimer !");
+                        } else {
+                            System.out.println("Cette tache n'existe pas !");
+                        }
                     }
-                    else{
-                        System.out.println("Cette tache n'existe pas !");
-                    }
-
                     break;
                 case 5:
                     running = false;
                     break;
-                default:
-                    System.out.println("Choix invalide !");
             }
         }
     }
